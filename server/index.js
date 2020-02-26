@@ -40,13 +40,19 @@ app.get('/', (req, res) => {
 });
 
 app.get('/values/all', async (req, res) => {
+  console.log("/values/all");
+
   const values = await pgClient.query('SELECT * from values');
 
+  console.log("values.rows", values.rows);
   res.send(values.rows);
 });
 
 app.get('/values/current', async (req, res) => {
+  console.log("/values/current");
+
   redisClient.hgetall('values', (err, values) => {
+    console.log("values current", values);
     res.send(values);
   });
 });
@@ -54,7 +60,9 @@ app.get('/values/current', async (req, res) => {
 app.post('/values', async (req, res) => {
   const index = req.body.index;
 
-  if (parseInt(index) > 40) {
+  console.log("/values is processing", index);
+
+  if (parseInt(index) > 400) {
     return res.status(422).send('Index too high');
   }
 
@@ -62,9 +70,12 @@ app.post('/values', async (req, res) => {
   redisPublisher.publish('insert', index);
   pgClient.query('INSERT INTO values(number) VALUES($1)', [index]);
 
+  console.log("working: true");
   res.send({ working: true });
 });
 
 app.listen(5000, err => {
-  console.log('Listening');
+  console.log('Listening on 5000x');
 });
+
+console.log('Server will come soon!');
