@@ -11,6 +11,11 @@ app.use(bodyParser.json());
 
 // Postgres Client Setup
 const { Pool } = require('pg');
+console.log("using keys.pgUser", keys.pgUser);
+console.log("using keys.pgHost", keys.pgHost);
+console.log("using keys.pgDatabase", keys.pgDatabase);
+console.log("using keys.pgPassword", keys.pgPassword);
+console.log("using keys.pgPort", keys.pgPort);
 const pgClient = new Pool({
   user: keys.pgUser,
   host: keys.pgHost,
@@ -26,6 +31,8 @@ pgClient
 
 // Redis Client Setup
 const redis = require('redis');
+console.log("using keys.redisHost", keys.redisHost);
+console.log("using keys.redisPort", keys.redisPort);
 const redisClient = redis.createClient({
   host: keys.redisHost,
   port: keys.redisPort,
